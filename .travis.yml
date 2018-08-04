@@ -24,7 +24,7 @@ env:
     - WINEDEBUG=fixme-all 
   matrix:
 # ARM BTX
-#   - HOST=arm-linux-gnueabihf PACKAGES="g++-arm-linux-gnueabihf" DEP_OPTS="NO_QT=1" GOAL="install" BITCOIN_CONFIG="--enable-glibc-back-compat --enable-reduce-exports"
+#   - HOST=arm-linux-gnueabihf PACKAGES="g++-arm-linux-gnueabihf python3-pip" DEP_OPTS="NO_QT=1" GOAL="install" BITCOIN_CONFIG="--enable-glibc-back-compat --enable-reduce-exports"
 # ARM LTC
     - HOST=arm-linux-gnueabihf PACKAGES="g++-arm-linux-gnueabihf" DEP_OPTS="NO_QT=1" GOAL="install" CHECK_DOC=0 BITCOIN_CONFIG="--enable-glibc-back-compat --enable-reduce-exports"
 # Win32
@@ -84,14 +84,14 @@ script:
     - export TRAVIS_COMMIT_LOG=`git log --format=fuller -1`
     - if [ -n "$USE_SHELL" ]; then export CONFIG_SHELL="$USE_SHELL"; fi
     - OUTDIR=$BASE_OUTDIR/$TRAVIS_PULL_REQUEST/$TRAVIS_JOB_NUMBER-$HOST
-    - BITCORE_CONFIG_ALL="--disable-dependency-tracking --prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
+    - BITCOIN_CONFIG_ALL="--disable-dependency-tracking --prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
     - depends/$HOST/native/bin/ccache --max-size=$CCACHE_SIZE
     - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
     - mkdir build && cd build
-    - ../configure --cache-file=config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
+    - ../configure --cache-file=config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG || ( cat config.log && false)
     - make distdir VERSION=$HOST
     - cd bitcore-$HOST
-    - ./configure --cache-file=../config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
+    - ./configure --cache-file=../config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG || ( cat config.log && false)
     - make $MAKEJOBS $GOAL || ( echo "Build failure. Verbose build follows." && make $GOAL V=1 ; false )
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib
     - if [ "$RUN_TESTS" = "true" ]; then travis_wait 30 make $MAKEJOBS check VERBOSE=1; fi
