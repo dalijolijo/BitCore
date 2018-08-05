@@ -62,7 +62,8 @@ before_install:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
 install:
     - if [ -n "$DPKG_ADD_ARCH" ]; then sudo dpkg --add-architecture "$DPKG_ADD_ARCH" ; fi
-    #- if [ -n "$PACKAGES" ]; then travis_retry sudo apt-get update; fi
+    - sudo add-apt-repository -y ppa:bitcoin/bitcoin
+    - sudo apt-get update
     - travis_retry sudo apt-get install --no-install-recommends --no-upgrade -qq $BASE_PACKAGES
     - if [ -n "$PACKAGES" ]; then travis_retry sudo apt-get install --no-install-recommends --no-upgrade -qq $PACKAGES; fi
     - if [ "$CHECK_DOC" = 1 -a "$TRAVIS_EVENT_TYPE" = "pull_request" ]; then travis_retry pip3 install flake8 --user; fi
