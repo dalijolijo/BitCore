@@ -93,11 +93,11 @@ script:
     - BITCORE_CONFIG_ALL="--disable-dependency-tracking --prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
     #ERROR - if [ -z "$NO_DEPENDS" ]; then depends/$HOST/bin/ccache --max-size=$CCACHE_SIZE; fi
     - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
-    #- mkdir build && cd build
-    - ./configure --cache-file=config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
+    - mkdir build && cd build
+    - ../configure --cache-file=config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
     - make distdir PACKAGE=bitcore VERSION=$HOST
     - cd bitcore-$HOST
-    - ../configure --cache-file=../config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
+    - ./configure $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
     - make $MAKEJOBS $GOAL || ( echo "Build failure. Verbose build follows." && make $GOAL V=1 ; false )
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib
     - if [ "$RUN_TESTS" = "true" ]; then travis_wait 30 make $MAKEJOBS check VERBOSE=1; fi
