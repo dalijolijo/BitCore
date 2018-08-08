@@ -99,9 +99,8 @@ script:
     - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
     # BEGIN src/univalue/.travis.yml 
     - cd $TRAVIS_BUILD_DIR && cd src/univalue
-    - echo "DEBUG TRAVIS_BUILD_DIR/univalue" && pwd && ls
     - UNIVALUE_CONFIG_ALL="--prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
-    - ./autogen.sh
+    - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
     - ./configure --cache-file=config.cache $UNIVALUE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
     - make
     - cd $TRAVIS_BUILD_DIR
