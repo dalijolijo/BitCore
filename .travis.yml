@@ -97,11 +97,11 @@ script:
     #ERROR: - if [ -z "$NO_DEPENDS" ]; then depends/$HOST/bin/ccache --max-size=$CCACHE_SIZE; fi
     - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
     # BEGIN src/univalue/.travis.yml 
-    - cd $TRAVIS_BUILD_DIR && cd src/univalue
-    - UNIVALUE_CONFIG_ALL="--prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
-    - ./configure --cache-file=config.cache $UNIVALUE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
-    - make
-    - cd $TRAVIS_BUILD_DIR
+    #- cd $TRAVIS_BUILD_DIR && cd src/univalue
+    #- UNIVALUE_CONFIG_ALL="--prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
+    #- ./configure --cache-file=config.cache $UNIVALUE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
+    #- make
+    #- cd $TRAVIS_BUILD_DIR
     # END src/univalue/.travis.yml 
     - mkdir build && cd build
     - echo "DEBUG1 build dir" && pwd && ls
