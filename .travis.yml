@@ -97,11 +97,11 @@ script:
     #ERROR: - if [ -z "$NO_DEPENDS" ]; then depends/$HOST/bin/ccache --max-size=$CCACHE_SIZE; fi
     - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
     # BEGIN src/univalue/.travis.yml 
-    #- cd $TRAVIS_BUILD_DIR && cd src/univalue
-    #- UNIVALUE_CONFIG_ALL="--prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
-    #- ./configure --cache-file=config.cache $UNIVALUE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
-    #- make
-    #- cd $TRAVIS_BUILD_DIR
+    - cd $TRAVIS_BUILD_DIR && cd src/univalue
+    - UNIVALUE_CONFIG_ALL="--prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
+    - ./configure --cache-file=config.cache $UNIVALUE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
+    - make
+    - cd $TRAVIS_BUILD_DIR
     # END src/univalue/.travis.yml 
     - mkdir build && cd build
     - echo "DEBUG1 build dir" && pwd && ls
@@ -112,9 +112,10 @@ script:
     - cd bitcore-$HOST
     - echo "DEBUG4 build bitcore HOST" && pwd && ls
     - ./configure --cache-file=../config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
-    - echo "DEBUG5 build bitcore HOST after config" && pwd && ls
+    - echo "DEBUG5 build bitcore HOST after config" && pwd && ls && ls src
     - make $MAKEJOBS $GOAL || ( echo "Build failure. Verbose build follows." && make $GOAL V=1 ; false )
     - echo "DEBUG6 build bitcore HOST after makejobs" && pwd && ls
+    - echo "DEBUG7 libtool info" && locate libtool && whereis libtool
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib
     - if [ "$RUN_TESTS" = "true" ]; then travis_wait 30 make $MAKEJOBS check VERBOSE=1; fi
     - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then extended="--extended --exclude pruning,dbcrash"; fi
