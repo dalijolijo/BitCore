@@ -22,7 +22,7 @@ env:
     - SDK_URL=https://bitcoincore.org/depends-sources/sdks
     - PYTHON_DEBUG=1
     - WINEDEBUG=fixme-all 
-    - BASE_PACKAGES="zlib1g-dev zip git build-essential libtool-bin autotools-dev automake pkg-config bsdmainutils curl libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libevent-dev libssl-dev libboost-all-dev libminiupnpc-dev libdb4.8-dev libdb4.8++-dev"
+    - BASE_PACKAGES="zlib1g-dev zip git build-essential libtool-bin autotools-dev automake autoconf pkg-config bsdmainutils curl libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libevent-dev libssl-dev libboost-all-dev libminiupnpc-dev libdb4.8-dev libdb4.8++-dev"
   matrix:
 # ARM32
   matrix:
