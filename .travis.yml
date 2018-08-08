@@ -106,14 +106,15 @@ script:
     - mkdir build && cd build
     - echo "DEBUG1 build dir" && pwd && ls
     - ../configure --cache-file=config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
-    - echo "DEBUG2: build dir  - after config" && pwd && ls
+    - echo "DEBUG2 build dir after config" && pwd && ls
     - make distdir PACKAGE=bitcore VERSION=$HOST
     - echo "DEBUG3 build distdir after make" && pwd && ls
     - cd bitcore-$HOST
     - echo "DEBUG4 build bitcore HOST" && pwd && ls
-    - ./configure $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
+    - ./configure --cache-file=../config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
     - echo "DEBUG5 build bitcore HOST after config" && pwd && ls
     - make $MAKEJOBS $GOAL || ( echo "Build failure. Verbose build follows." && make $GOAL V=1 ; false )
+    - echo "DEBUG6 build bitcore HOST after makejobs" && pwd && ls
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib
     - if [ "$RUN_TESTS" = "true" ]; then travis_wait 30 make $MAKEJOBS check VERBOSE=1; fi
     - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then extended="--extended --exclude pruning,dbcrash"; fi
