@@ -22,7 +22,7 @@ env:
     - SDK_URL=https://bitcoincore.org/depends-sources/sdks
     - PYTHON_DEBUG=1
     - WINEDEBUG=fixme-all 
-    - BASE_PACKAGES="zlib1g-dev zip git build-essential libtool autotools-dev automake pkg-config bsdmainutils curl libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libevent-dev libssl-dev libboost-all-dev libminiupnpc-dev libdb4.8-dev libdb4.8++-dev"
+    - BASE_PACKAGES="zlib1g-dev zip git build-essential libtool-bin autotools-dev automake pkg-config bsdmainutils curl libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libevent-dev libssl-dev libboost-all-dev libminiupnpc-dev libdb4.8-dev libdb4.8++-dev"
   matrix:
 # ARM32
   matrix:
@@ -83,8 +83,6 @@ before_script:
     - if [ -z "$NO_DEPENDS" ]; then make $MAKEJOBS -C depends HOST=$HOST $DEP_OPTS; fi
     # Start xvfb if needed, as documented at https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
     - if [ "$NEED_XVFB" = 1 ]; then export DISPLAY=:99.0; /sbin/start-stop-daemon --start --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac; fi
-    # src/univalue/.travis.yml
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew uninstall libtool; brew install libtool; fi
 script:
     - if [ "$CHECK_DOC" = 1 -a "$TRAVIS_REPO_SLUG" = "dalijolijo/BitCore" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then while read LINE; do travis_retry gpg --keyserver hkp://subset.pool.sks-keyservers.net --recv-keys $LINE; done < contrib/verify-commits/trusted-keys; fi
     - if [ "$CHECK_DOC" = 1 -a "$TRAVIS_REPO_SLUG" = "dalijolijo/BitCore" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then git fetch --unshallow; fi
@@ -96,13 +94,6 @@ script:
     #- BITCORE_CONFIG_ALL="--disable-dependency-tracking --prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
     #ERROR: - if [ -z "$NO_DEPENDS" ]; then depends/$HOST/bin/ccache --max-size=$CCACHE_SIZE; fi
     - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
-    # BEGIN src/univalue/.travis.yml 
-    #- cd $TRAVIS_BUILD_DIR && cd src/univalue
-    #- UNIVALUE_CONFIG_ALL="--prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
-    #- ./configure --cache-file=config.cache $UNIVALUE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
-    #- make
-    #- cd $TRAVIS_BUILD_DIR
-    # END src/univalue/.travis.yml 
     - mkdir build && cd build
     - echo "DEBUG1 build dir" && pwd && ls
     - ../configure --cache-file=config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
@@ -115,7 +106,7 @@ script:
     - echo "DEBUG5 build bitcore HOST after config" && pwd && ls && ls src
     - make $MAKEJOBS $GOAL || ( echo "Build failure. Verbose build follows." && make $GOAL V=1 ; false )
     - echo "DEBUG6 build bitcore HOST after makejobs" && pwd && ls
-    - echo "DEBUG7 libtool info" && locate libtool && whereis libtool
+    - echo "DEBUG7 libtool info" && locate libtool
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib
     - if [ "$RUN_TESTS" = "true" ]; then travis_wait 30 make $MAKEJOBS check VERBOSE=1; fi
     - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then extended="--extended --exclude pruning,dbcrash"; fi
