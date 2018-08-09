@@ -93,7 +93,9 @@ script:
     - OUTDIR=$BASE_OUTDIR/$TRAVIS_PULL_REQUEST/$TRAVIS_JOB_NUMBER-$HOST
     - BITCORE_CONFIG_ALL="--disable-tests --disable-hardening --disable-bench --disable-dependency-tracking --prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
     #- BITCORE_CONFIG_ALL="--disable-dependency-tracking --prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
+    # https://github.com/bitcoin/bitcoin/commit/29fad97c320c892ab6a480c81e2078ec22ab354b
     #ERROR: - if [ -z "$NO_DEPENDS" ]; then depends/$HOST/bin/ccache --max-size=$CCACHE_SIZE; fi
+    - if [ -z "$NO_DEPENDS" ]; then ccache --max-size=$CCACHE_SIZE; fi
     - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
     - mkdir build && cd build
     - echo "DEBUG1 build dir" && pwd && ls
