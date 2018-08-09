@@ -104,7 +104,7 @@ script:
     - echo "DEBUG4 build bitcore HOST" && pwd && ls
     - ./configure --cache-file=../config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || ( cat config.log && false)
     - echo "DEBUG5 build bitcore HOST after config" && pwd && ls && ls src
-    - ranlib src/libbitcoreconsensus.la
+    #ERROR: - ranlib src/libbitcoreconsensus.la
     - make $MAKEJOBS $GOAL || ( echo "Build failure. Verbose build follows." && make $GOAL V=1 ; false )
     - echo "DEBUG6 build bitcore HOST after makejobs" && pwd && ls
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib
