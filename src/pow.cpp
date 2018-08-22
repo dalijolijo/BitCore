@@ -136,7 +136,12 @@ unsigned int static DUAL_KGW3(const CBlockIndex* pindexLast, const Consensus::Pa
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
     assert(pindexLast != nullptr);
-
+	unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
+	
+if (params.fPowNoRetargeting && params.fPowAllowMinDifficultyBlocks )
+	{
+		return nProofOfWorkLimit;
+	}
     int fork1 = 10000;
     int fork2 = 21000;
     if (pindexLast->nHeight+1 <= fork1)
@@ -144,7 +149,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     return DUAL_KGW3(pindexLast, params, pblock);
     }
 
-    unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
+    
  if (pindexLast->nHeight+1 <= fork2)
     {
     // Only change once per difficulty adjustment interval
