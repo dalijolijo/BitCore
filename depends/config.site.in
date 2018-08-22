@@ -64,7 +64,8 @@ LDFLAGS="-L$depends_prefix/lib $LDFLAGS"
 CC="@CC@"
 CXX="@CXX@"
 OBJC="${CC}"
-CCACHE=$depends_prefix/native/bin/ccache
+#https://github.com/bitcoin/bitcoin/commit/29fad97c320c892ab6a480c81e2078ec22ab354b
+#CCACHE=$depends_prefix/native/bin/ccache
 PYTHONPATH=$depends_prefix/native/lib/python/dist-packages:$PYTHONPATH
 
 if test -n "@AR@"; then
