@@ -117,3 +117,15 @@ script:
 after_script:
     - echo $TRAVIS_COMMIT_RANGE
     - echo $TRAVIS_COMMIT_LOG
+before_deploy:
+      # Set up git user name and tag this commit
+      - git config --local user.name "dalijolijo"
+      - git config --local user.email "david.bergen@gmx.net"
+      - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+deploy:
+      provider: releases
+      api_key:
+         secure: "Yv1Gq4jG6eoNqZkwhfpJn9AJ5q/zfQYksqO8z2lbqAABSUC7XgDG/8TQiGndRYxwkFrIWp2/gKWn2fQtKQ/2f2QNxLjvGrg1HHpVUGjq7iJ9KInuFDU053lU66BXeBet2q5Sh5YbD1IxXGkRxE6julOCpPS3F+Xr2DmxLvzBbr0bqlxhK88Xu2jw9meJyi9E3vtP9wWFuqaN2AfYZxVFZ4nzCeZbdARpOUcqN9WzGLYuIqIW47T8SGPBsdUJGHvtMc/PAq9rcCO0maDVQtXPtE2xkaofHeIZxkg1J3iv/RTuu91vgZHkU2E42R2x7JIAeptHXDTbtCQOyDfQALaET8790N3uqhQvy9dY9F7VFjgn1A7xMbyTotlotj7XMakwNBm6oimgup1UMXyJac8Mxeah2GQztdmYJQVw3jFQUoz4pPcqklRIhqfhxZjrB8JH0P+GswYcNd32wy2zNii3WBcRe3qt3Vgn0VOCWBaBgd/mZyVut4pmvhInxBdGoK+aDq7H5eH96rwMdo6rEyAPa3nvv4//LNGAvPz3R1jW2FmRdQgTWhORAYUWv3kuQZEZvmHmFa5Yv+8tmZdKBVYVWYN8Ny0sN1Lt5SrvnwJKX4RhduExrrQsbNEpplof0o9/K4pdkTWUyAb2/1OEgXl9HsLafVhmqL5uYx3zgmq1y0s="
+      file_glob: true
+      file: out/**/zip/*
+      skip_cleanup: true
