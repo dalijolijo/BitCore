@@ -121,14 +121,15 @@ script:
 after_script:
 - echo $TRAVIS_COMMIT_RANGE
 - echo $TRAVIS_COMMIT_LOG
-before_deploy:
-- echo "DEBUG7 build before_deploy" && cd .. && pwd && ls
-- tar zcf bitcore-$HOST
+#before_deploy:
+#- echo "DEBUG7 build before_deploy" && cd .. && pwd && ls
+#- tar zcf bitcore-$HOST
 deploy:
   provider: releases
   api_key:
     secure: rD5xnpX8vz0FInCLHKCwRb5emuKRCukEcGRsWjpZzwANO9ISZhAJxziTvS/mJ/1lqfsxQbxK+EWOEvUipTSY4HoUgCzeyV8Ct39bOHLfR28MIVQ1k1w2uB8Z1QWMaJFkuAkRqtspNGNLWNaKsAy1r0VescwJiqBqgaLnZrau4bLImLOqswy40lD3YRdO49KX5VTdaOu+alE2RpYgMS742/rAC69elxlZR4Vfdxew1f7HOyluciJlgIN3MCsZS9Fd0t7xNGwJVfk3nbCD2CfCM7UTb+vvXVhIs25TDaVoCvFKF84wHN8QIA8XuVDXRJQCTZuNvwi2YGbdSC+S6F7dW/EaxcuPEoXqsuI1moZlbOjww2Bk43bbt3IFw2MvfrDIa8J3p5Id4LwBoio4pzuiiqN3bIvRCzdavezoPSji10/fTHvdqSgAHqdYaTSA1L7LlixnFLW6RnygRIRYWY4CegIYes0sKVDAzhX+UNY7CXuEsUFBui5oCC7qPPySnTeNjPb038H8wYBFoG2GqX7cWjjPU64EIXUXPxFi152fpyZ6eiy/K+EWQl7Cmv/yK+lzwrLiBaDFMO3g22n30bNxonLggVEBj2mpCq8K6+XoPgqCAadtkMZuIvweihDPsM0lwVp9E5gDvvxgOfhshBU6/6IYF4nkm/kq0ahMguQxCnM=
   file_glob: true
+  file: $BASE_OUTDIR/*
   file: $BASE_OUTDIR/bitcore-$HOST
   skip_cleanup: true
   on:
