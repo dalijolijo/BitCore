@@ -121,8 +121,8 @@ script:
 - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then extended="--extended --exclude pruning,dbcrash"; fi
 - if [ "$RUN_TESTS" = "true" ]; then test/functional/test_runner.py --coverage --quiet ${extended}; fi
 - echo "DEBUG7 before_deploy" && pwd && ls
-- echo "DEBUG8 before_deploy script content" && cat ./pre-deploy.sh
-- echo "DEBUG9 before_deploy parent dir" && ls ..
+- echo "DEBUG8 before_deploy script content" && cat $TRAVIS_BUILD_DIR/pre-deploy.sh
+- echo "DEBUG9 before_deploy parent dir" && ls $TRAVIS_BUILD_DIR
 after_script:
 - echo $TRAVIS_COMMIT_RANGE
 - echo $TRAVIS_COMMIT_LOG
