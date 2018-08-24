@@ -25,7 +25,7 @@ env:
   - BASE_PACKAGES="zlib1g-dev zip git build-essential libtool autotools-dev automake
     autoconf binutils pkg-config bsdmainutils curl libboost-system-dev libboost-filesystem-dev
     libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev
-    libevent-dev libssl-dev libboost-all-dev libminiupnpc-dev"
+    libevent-dev libssl-dev libboost-all-dev libminiupnpc-dev libdb4.8-dev libdb4.8++-dev"
   matrix:
   - HOST=arm-linux-gnueabihf PACKAGES="g++-arm-linux-gnueabihf python3-zmq python3-dev
     python3-pip bc" DEP_OPTS="NO_QT=1" GOAL="install" CHECK_DOC=0 BITCORE_CONFIG="--enable-glibc-back-compat
