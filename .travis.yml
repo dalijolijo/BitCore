@@ -122,10 +122,6 @@ after_script:
 - echo $TRAVIS_COMMIT_RANGE
 - echo $TRAVIS_COMMIT_LOG
 before_deploy:
-- git config --local user.name "dalijolijo"
-- git config --local user.email "david.bergen@gmx.net"
-- echo "DEBUG7 OUTDIR" && ls $OUTDIR
-- echo "DEBUG8 BASE_OUTDIR" && ls $BASE_OUTDIR
 - cd .. & ls
 - tar zcf bitcore-$HOST
 deploy:
