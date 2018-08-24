@@ -99,49 +99,39 @@ before_script:
   --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb
   -- :99 -ac; fi
 script:
-- if [ "$CHECK_DOC" = 1 -a "$TRAVIS_REPO_SLUG" = "dalijolijo/BitCore" -a "$TRAVIS_PULL_REQUEST"
-  = "false" ]; then while read LINE; do travis_retry gpg --keyserver hkp://subset.pool.sks-keyservers.net
-  --recv-keys $LINE; done < contrib/verify-commits/trusted-keys; fi
-- if [ "$CHECK_DOC" = 1 -a "$TRAVIS_REPO_SLUG" = "dalijolijo/BitCore" -a "$TRAVIS_PULL_REQUEST"
-  = "false" ]; then git fetch --unshallow; fi
-- if [ "$CHECK_DOC" = 1 -a "$TRAVIS_REPO_SLUG" = "dalijolijo/BitCore" -a "$TRAVIS_PULL_REQUEST"
-  = "false" ]; then contrib/verify-commits/verify-commits.sh; fi
+- if [ "$CHECK_DOC" = 1 -a "$TRAVIS_REPO_SLUG" = "dalijolijo/BitCore" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then while read LINE; do travis_retry gpg --keyserver hkp://subset.pool.sks-keyservers.net --recv-keys $LINE; done < contrib/verify-commits/trusted-keys; fi
+- if [ "$CHECK_DOC" = 1 -a "$TRAVIS_REPO_SLUG" = "dalijolijo/BitCore" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then git fetch --unshallow; fi
+- if [ "$CHECK_DOC" = 1 -a "$TRAVIS_REPO_SLUG" = "dalijolijo/BitCore" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then contrib/verify-commits/verify-commits.sh; fi
 - export TRAVIS_COMMIT_LOG=`git log --format=fuller -1`
 - if [ -n "$USE_SHELL" ]; then export CONFIG_SHELL="$USE_SHELL"; fi
 - OUTDIR=$BASE_OUTDIR/$TRAVIS_PULL_REQUEST/$TRAVIS_JOB_NUMBER-$HOST
-- BITCORE_CONFIG_ALL="--disable-tests --disable-hardening --disable-bench --disable-dependency-tracking
-  --prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
+- BITCORE_CONFIG_ALL="--disable-tests --disable-hardening --disable-bench --disable-dependency-tracking --prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
 - if [ -z "$NO_DEPENDS" ]; then ccache --max-size=$CCACHE_SIZE; fi
 - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
 - mkdir build && cd build
 - echo "DEBUG1 build dir" && pwd && ls
-- "../configure --cache-file=config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || (
-  cat config.log && false)"
+- "../configure --cache-file=config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || (cat config.log && false)"
 - echo "DEBUG2 build dir after config" && pwd && ls
 - make distdir PACKAGE=bitcore VERSION=$HOST
 - echo "DEBUG3 build distdir after make" && pwd && ls
 - cd bitcore-$HOST
 - echo "DEBUG4 build bitcore HOST" && pwd && ls
-- "./configure --cache-file=../config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG ||
-  ( cat config.log && false)"
+- "./configure --cache-file=../config.cache $BITCORE_CONFIG_ALL $BITCORE_CONFIG || (cat config.log && false)"
 - echo "DEBUG5 build bitcore HOST after config" && pwd && ls && ls src
 - make $MAKEJOBS $GOAL || ( echo "Build failure. Verbose build follows." && make $GOAL
   V=1 ; false )
 - echo "DEBUG6 build bitcore HOST after makejobs" && pwd && ls
 - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib
-- if [ "$RUN_TESTS" = "true" ]; then travis_wait 30 make $MAKEJOBS check VERBOSE=1;
-  fi
-- if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then extended="--extended --exclude pruning,dbcrash";
-  fi
-- if [ "$RUN_TESTS" = "true" ]; then test/functional/test_runner.py --coverage --quiet
-  ${extended}; fi
+- if [ "$RUN_TESTS" = "true" ]; then travis_wait 30 make $MAKEJOBS check VERBOSE=1; fi
+- if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then extended="--extended --exclude pruning,dbcrash"; fi
+- if [ "$RUN_TESTS" = "true" ]; then test/functional/test_runner.py --coverage --quiet ${extended}; fi
+- echo "DEBUG7 before_deploy" && pwd && ls
+- echo "DEBUG8 before_deploy script content" && cat ./pre-deploy.sh
+- echo "DEBUG9 before_deploy parent dir" && ls ..
 after_script:
 - echo $TRAVIS_COMMIT_RANGE
 - echo $TRAVIS_COMMIT_LOG
 before_deploy:
-- echo "DEBUG7 before_deploy" && pwd && ls
-- echo "DEBUG8 before_deploy script content" && cat ./pre-deploy.sh
-- echo "DEBUG9 before_deploy parent dir" && ls ..
 - ./pre-deploy.sh
 deploy:
   provider: releases
