@@ -37,7 +37,7 @@ env:
 # x86_64 Linux, No wallet
     - HOST=x86_64-unknown-linux-gnu NAME="x86_64-linux-gnu_no-wallet" PACKAGES="python3 python3-dev python3-pip" DEP_OPTS="NO_WALLET=1" RUN_TESTS=false GOAL="install" BITCOIN_CONFIG="--enable-glibc-back-compat --enable-reduce-exports --enable-sse2"
 # Cross-Mac
-    - HOST=x86_64-apple-darwin11 NAME="osx64" PACKAGES="cmake imagemagick libcap-dev librsvg2-bin libz-dev libbz2-dev libtiff-tools python-dev" BITCOIN_CONFIG="--enable-gui --enable-reduce-exports --enable-werror --enable-sse2" OSX_SDK=10.11 GOAL="deploy"
+    - HOST=x86_64-apple-darwin14 NAME="osx64" PACKAGES="cmake imagemagick libcap-dev librsvg2-bin libz-dev libbz2-dev libtiff-tools python-dev python3-setuptools-git" BITCOIN_CONFIG="--enable-gui --enable-reduce-exports --enable-werror --enable-sse2" OSX_SDK=10.11 GOAL="deploy"
 before_install:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
 install:
@@ -69,10 +69,11 @@ script:
     - BITCOIN_CONFIG_ALL="--disable-dependency-tracking --prefix=$TRAVIS_BUILD_DIR/depends/$HOST --bindir=$OUTDIR/bin --libdir=$OUTDIR/lib"
     - if [ -z "$NO_DEPENDS" ]; then depends/$HOST/native/bin/ccache --max-size=$CCACHE_SIZE; fi
     - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
-    - mkdir build && cd build
+    - mkdir build
+    - cd build || (echo "could not enter build directory"; exit 1)
     - ../configure --cache-file=config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG || ( cat config.log && false )
     - make distdir VERSION=$HOST
-    - cd bitcore-$HOST
+    - cd "bitcore-$HOST" || (echo "could not enter distdir bitcore-$HOST"; exit 1)
     - ./configure --cache-file=../config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG || ( cat config.log && false )
     - make $MAKEJOBS $GOAL || ( "Build failure. Verbose build follows." && make $GOAL V=1 ; false )
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib
@@ -98,6 +99,7 @@ script:
     
     - pwd
     - ls ./*
+    - ls ./*/*
     - ls ..
     - ls $BASE_OUTDIR/**/*
 after_script:
