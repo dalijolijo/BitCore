@@ -9,7 +9,6 @@ cache:
   - depends/sdk-sources
   - $HOME/.ccache
 stages:
-  - lint
   - test
 env:
   global:
@@ -111,3 +110,17 @@ jobs:
       OSX_SDK=10.11
       GOAL="install"
       BITCOIN_CONFIG="--without-gui --enable-reduce-exports"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: A+tfi7t5bVrUJgAYLaHeYhK1UAJNF11VK2PCj8yg5+6FZsR15Vf/Zx6xzdSvJteFIqzEBa9PzPBtW1BrASHryCaMM7Zo1fofTUrfw1whd0A7xBS3DgZShfU1c1Oj+niH21cRel64KCOl/0eEuF9SHri8TtJO79KChikl4nAKtXZdZ+3EpiJC7IUZhrHd4JU2oSNAt/5AB5h87/pBGNSsJaUwrh8hW/LJZfEx1vKT22OqLgkQOwzt0ES8D9HPPRrhxAadweAm+SHrMGHBYOsVL7s7H5MoEUpz/2m2PRQ7MTi9BNWbLr53quqJSKvgv8qTOv/7m/HkjwwgqSUd4KhHIcw2CNC/Tb86TCexVUx/ZHqvEZk/91m6w2ln1RY7kpdhl10SCb0VFyMmf9n5MPO8SkFUOmfWmjZIqkcOyUL8TcohxOUPxp8kFerRsP31zmbPCQSQw0djcdKr5w6hFR+uI+eyjR59UVoGfwZGQbEDp+rb8qD7X+yE7/AwvgOWxpyWGjzQFZYVbxFs8w987iJUiCkCfqH5iw8sOfdv6QC02NWzqfTb2w7YyrbQoB7US96Lr+Jo7Ux2lHigLyCoTPLM1lBwiV6vKaWgkckcWN3zqod1LJAIOfbw29uARh6jFq8V+HZRakRlqhZKfLUFl0VgQiSURyK7qcaQioPLU2p6/38=
+  file_glob: true
+  file:
+    - $OUTDIR/*.tar.gz
+    - $OUTDIR/*.zip
+    - $OUTDIR/*.dmg
+    - $OUTDIR/*.exe
+  skip_cleanup: true 
+  on:
+    tags: true
