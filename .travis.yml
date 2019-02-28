@@ -62,10 +62,10 @@ jobs:
     env: >-
       HOST=i686-w64-mingw32
       DPKG_ADD_ARCH="i386"
-      DEP_OPTS="NO_QT=1"
+      DEP_OPTS="NO_QT=0"
       PACKAGES="python3 nsis g++-mingw-w64-i686 wine1.6 bc"
       GOAL="install"
-      BITCOIN_CONFIG="--without-gui --enable-reduce-exports --disable-gui-tests"
+      BITCOIN_CONFIG="--enable-gui --enable-reduce-exports"
 
   # win64
   - stage: test
