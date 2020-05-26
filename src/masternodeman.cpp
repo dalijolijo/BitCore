@@ -714,7 +714,7 @@ void CMasternodeMan::ProcessMasternodeConnections(CConnman& connman)
             LogPrintf("CMasternodeMan::ProcessMasternodeConnections -- removing node: peer=%d addr=%s nRefCount=%d fNetworkNode=%d fInbound=%d fMasternode=%d\n",
                       pnode->GetId(), pnode->addr.ToString(), pnode->GetRefCount(), pnode->fNetworkNode, pnode->fInbound, pnode->fMasternode);
             // FXTC END
-            pnode->fDisconnect = true;
+            //pnode->fDisconnect = true;
         }
     });
 }
